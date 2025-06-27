@@ -39,3 +39,6 @@ out/
 /Dockerfile
 
 /src/main/resources/application-local.properties
+
+###ocr
+src/main/resources/secret/*.json
