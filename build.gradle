@@ -32,6 +32,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'com.google.cloud:google-cloud-vision:3.19.0'
+    implementation 'com.google.guava:guava:31.1-jre'
 }
 
 tasks.named('test') {
