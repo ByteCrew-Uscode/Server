@@ -2,6 +2,8 @@ package com.bytecrew.uscode.dto;
 
 import com.bytecrew.uscode.domain.Tool;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -11,8 +13,8 @@ import java.util.Date;
 @Builder
 public class ReservationRequestDto {
     private Tool tool;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String location;
     private String userName;
 }

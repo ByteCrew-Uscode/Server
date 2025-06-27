@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,10 +24,10 @@ public class Reservation {
     private Tool tool;
 
     //대여 시작 일자
-    private Date startDate;
+    private LocalDate startDate;
 
     //반납일자
-    private Date endDate;
+    private LocalDate endDate;
 
     //예약 위치
     private String location;
@@ -39,7 +40,7 @@ public class Reservation {
     private Long version;
 
     @Builder
-    public Reservation(Tool tool, Date startDate, Date endDate, String location, String reservationName) {
+    public Reservation(Tool tool, LocalDate startDate, LocalDate endDate, String location, String reservationName) {
         this.tool = tool;
         this.startDate = startDate;
         this.endDate = endDate;
