@@ -1,6 +1,7 @@
 package com.bytecrew.uscode.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Entity
@@ -19,7 +20,8 @@ public class ToolInventory {
     @Column(nullable = false, unique = true)
     private Tool toolType;
 
-    @Column(nullable = true) // 수량은 수동으로 관리하므로 nullable 허용
+    @Column(nullable = false)
+    @Min(0)
     private Integer quantity;
 }
 
