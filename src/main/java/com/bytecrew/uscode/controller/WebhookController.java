@@ -72,8 +72,8 @@ public class WebhookController {
             }
 
             // 날짜 및 시간 파싱
-            LocalDate startDate = LocalDate.parse(start); // "2025-06-28" 형식
-            LocalDate endDate = LocalDate.parse(end); // "10:00:00" 형식
+            LocalDate startDate = LocalDate.parse(start.substring(0, 10)); // "2025-06-28" 형식
+            LocalDate endDate = LocalDate.parse(end.substring(0, 10)); // "10:00:00" 형식
 
             // 예약 생성
             ReservationRequestDto dto = new ReservationRequestDto();
