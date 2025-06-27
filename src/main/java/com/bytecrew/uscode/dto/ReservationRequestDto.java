@@ -1,4 +1,4 @@
-package com.bytecrew.uscode.dto.reservation;
+package com.bytecrew.uscode.dto;
 
 import lombok.Data;
 import lombok.Getter;

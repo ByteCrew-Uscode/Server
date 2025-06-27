@@ -1,4 +1,4 @@
-package com.bytecrew.uscode.dto.reservation;
+package com.bytecrew.uscode.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,5 @@ import lombok.Data;
 public class ToolDto {
     private Long id;
     private String name;
-    private String description;
 }
 

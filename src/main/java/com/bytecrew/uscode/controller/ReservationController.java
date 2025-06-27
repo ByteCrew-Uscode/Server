@@ -1,7 +1,7 @@
-package com.bytecrew.uscode.controller.reservation;
+package com.bytecrew.uscode.controller;
 
 
-import com.bytecrew.uscode.dto.reservation.ReservationRequestDto;
+import com.bytecrew.uscode.dto.ReservationRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
