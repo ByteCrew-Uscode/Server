@@ -24,7 +24,7 @@ public class GoogleOcrController {
             summary = "주민등록증 OCR 추출",
             description = "이미지에서 이름과 주민번호를 추출합니다. DB에 저장하지 않고 응답만 반환합니다."
     )
-    @PostMapping("/idcard")
+    @PostMapping(value = "/idcard", consumes = "multipart/form-data")
     public ResponseEntity<OcrExtractResponseDto> extractFromIdCard(
             @Parameter(description = "주민등록증 이미지 파일", required = true)
             @RequestParam MultipartFile image
