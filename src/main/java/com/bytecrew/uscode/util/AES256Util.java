@@ -13,7 +13,7 @@ public class AES256Util {
 
     private static String secretKey;
 
-    @Value("${aes.secret-key}")
+    @Value("${aes.secret.key}")
     private String injectedKey;
 
     @PostConstruct
