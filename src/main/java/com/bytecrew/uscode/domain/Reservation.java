@@ -1,7 +1,9 @@
 package com.bytecrew.uscode.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class Reservation {
 
     @Id
@@ -31,4 +34,16 @@ public class Reservation {
 
     //예약자 성명
     private String reservationName;
+
+    @Version
+    private Long version;
+
+    @Builder
+    public Reservation(Tool tool, Date startDate, Date endDate, String location, String reservationName) {
+        this.tool = tool;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.reservationName = reservationName;
+    }
 }

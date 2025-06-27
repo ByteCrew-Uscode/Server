@@ -1,12 +1,18 @@
 package com.bytecrew.uscode.dto;
 
-import lombok.Data;
-import lombok.Getter;
+import com.bytecrew.uscode.domain.Tool;
+import lombok.*;
+import java.util.Date;
 
-@Data
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ReservationRequestDto {
-    private Long toolId;
+    private Tool tool;
+    private Date startDate;
+    private Date endDate;
+    private String location;
     private String userName;
 }
-

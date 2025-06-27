@@ -1,5 +1,6 @@
 package com.bytecrew.uscode.domain;
 
+import com.bytecrew.uscode.dto.ReservationRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -23,5 +24,9 @@ public class ToolInventory {
     @Column(nullable = false)
     @Min(0)
     private Integer quantity;
+
+    public Tool getToolType(ReservationRequestDto reservationRequestDto){
+        return this.toolType;
+    }
 }
 
