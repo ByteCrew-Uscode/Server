@@ -4,6 +4,7 @@ import com.bytecrew.uscode.domain.Reservation;
 import com.bytecrew.uscode.domain.Tool;
 import com.bytecrew.uscode.domain.ToolInventory;
 import com.bytecrew.uscode.dto.ReservationRequestDto;
+import com.bytecrew.uscode.dto.ReservationResponseDto;
 import com.bytecrew.uscode.dto.ToolInventoryAdd;
 import com.bytecrew.uscode.repository.ReservationRepository;
 import com.bytecrew.uscode.repository.ToolInventoryRepository;
@@ -52,9 +53,26 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<ReservationResponseDto> getAllReservations() {
+        List<Reservation> reservations = reservationRepository.findAll();
+
+        return reservations.stream().map(reservation -> {
+            ToolInventory inventory = toolInventoryRepository.findByToolType(reservation.getTool())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 도구에 대한 이미지 없음"));
+
+            return ReservationResponseDto.builder()
+                    .id(reservation.getId())
+                    .reservationName(reservation.getReservationName())
+                    .tool(reservation.getTool())
+                    .startDate(reservation.getStartDate())
+                    .endDate(reservation.getEndDate())
+                    .location(reservation.getLocation())
+                    .rentalLocation(reservation.getRentalLocation())
+                    .image(inventory.getImage())
+                    .build();
+        }).toList();
     }
+
 
     public Optional<Reservation> getReservationById(Long id) {
         return reservationRepository.findById(id);

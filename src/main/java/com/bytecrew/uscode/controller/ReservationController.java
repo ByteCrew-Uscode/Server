@@ -4,6 +4,7 @@ import com.bytecrew.uscode.domain.Tool;
 import com.bytecrew.uscode.domain.Reservation;
 import com.bytecrew.uscode.domain.ToolInventory;
 import com.bytecrew.uscode.dto.ReservationRequestDto;
+import com.bytecrew.uscode.dto.ReservationResponseDto;
 import com.bytecrew.uscode.dto.ToolInventoryAdd;
 import com.bytecrew.uscode.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,9 +71,10 @@ public class ReservationController {
 
     @Operation(summary = "전체 예약 조회", description = "모든 예약 목록을 반환합니다.")
     @GetMapping
-    public ResponseEntity<List<Reservation>> getAllReservations() {
+    public ResponseEntity<List<ReservationResponseDto>> getAllReservations() {
         return ResponseEntity.ok(reservationService.getAllReservations());
     }
+
 
     @Operation(summary = "예약 상세 조회", description = "특정 예약 ID로 예약 정보를 조회합니다.")
     @ApiResponses({

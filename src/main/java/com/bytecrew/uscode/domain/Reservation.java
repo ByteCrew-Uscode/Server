@@ -40,6 +40,9 @@ public class Reservation {
     @Version
     private Long version;
 
+   // @OneToOne(FetchType.LAZY)
+   // private 이미지
+
     @Builder
     public Reservation(Tool tool, LocalDate startDate, LocalDate endDate, String location, String reservationName, String rentalLocation) {
         this.tool = tool;
