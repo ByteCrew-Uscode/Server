@@ -32,6 +32,7 @@ public class Reservation {
     //예약 위치
     private String location;
 
+    @Column(name = "rental_location")
     private String rentalLocation;
 
     //예약자 성명

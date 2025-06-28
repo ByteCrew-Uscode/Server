@@ -17,4 +17,5 @@ public class ReservationRequestDto {
     private LocalDate endDate;
     private String location;
     private String userName;
+    private String rentalLocation;
 }

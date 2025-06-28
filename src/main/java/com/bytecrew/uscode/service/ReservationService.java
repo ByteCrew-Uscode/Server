@@ -49,6 +49,7 @@ public class ReservationService {
                 .endDate(dto.getEndDate())
                 .location(dto.getLocation())
                 .reservationName(dto.getUserName())
+                .rentalLocation(dto.getRentalLocation())
                 .build();
         return reservationRepository.save(reservation);
     }
@@ -100,6 +101,7 @@ public class ReservationService {
         reservation.setEndDate(dto.getEndDate());
         reservation.setLocation(dto.getLocation());
         reservation.setReservationName(dto.getUserName());
+        reservation.setRentalLocation(dto.getRentalLocation());
 
         return reservationRepository.save(reservation);
     }
