@@ -2,6 +2,7 @@ package com.bytecrew.uscode.controller;
 
 import com.bytecrew.uscode.domain.Tool;
 import com.bytecrew.uscode.domain.Reservation;
+import com.bytecrew.uscode.domain.ToolInventory;
 import com.bytecrew.uscode.dto.ReservationRequestDto;
 import com.bytecrew.uscode.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,11 +28,13 @@ public class ReservationController {
 
     @Operation(summary = "도구 목록 조회", description = "예약 가능한 농기구들의 이름 목록을 반환합니다.")
     @GetMapping("/tools")
-    public ResponseEntity<List<String>> getToolNames() {
-        List<String> toolNames = Arrays.stream(Tool.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<Tool>> getToolNames() {
+//        List<String> toolNames = Arrays.stream(Tool.values())
+//                .map(Enum::name)
+//                .collect(Collectors.toList());
+        List<Tool> toolNames = reservationService.getAllToolInventory();
         return ResponseEntity.ok(toolNames);
+        //tool_inventory
     }
 
     @Operation(summary = "예약 생성", description = "새로운 농기구 예약을 등록합니다.")
