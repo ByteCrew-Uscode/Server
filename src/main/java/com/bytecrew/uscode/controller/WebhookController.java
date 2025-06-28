@@ -81,13 +81,16 @@ public class WebhookController {
             LocalDate startDate = LocalDate.parse(start.substring(0, 10)); // "2025-06-28" 형식
             LocalDate endDate = LocalDate.parse(end.substring(0, 10)); // "10:00:00" 형식
 
+            //가장 가까운 대여소
+            String nearest = toolLocationService.getLocationsByTool(Tool.valueOf(toolName)).getFirst().location();
+
             // 예약 생성
             ReservationRequestDto dto = new ReservationRequestDto();
             dto.setTool(Tool.valueOf(toolName));
             dto.setStartDate(startDate);
             dto.setEndDate(endDate);
+            dto.setLocation(nearest);
             reservationService.createReservation(dto);
-            String nearest = toolLocationService.getLocationsByTool(Tool.valueOf(toolName)).getFirst().location();
             return String.format("%s를 %s 부터 %s 까지 예약했습니다. 대여소는 %s 입니다. 계약서 작성을 해드릴까요?", toolName, startDate, endDate, nearest);
         } catch (Exception e) {
             return "예약 처리 중 오류가 발생했습니다. 정확한 날짜와 시간을 다시 말해주세요.";
