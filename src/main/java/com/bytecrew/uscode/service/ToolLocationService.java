@@ -45,7 +45,8 @@ public class ToolLocationService {
                 .map(mapping -> new ToolQuantityDto(
                         mapping.getToolInventory().getToolType(),
                         mapping.getQuantity(),
-                        mapping.getToolInventory().getDescription()
+                        mapping.getToolInventory().getDescription(),
+                        mapping.getToolInventory().getImage()
                 ))
                 .collect(Collectors.toList());
     }

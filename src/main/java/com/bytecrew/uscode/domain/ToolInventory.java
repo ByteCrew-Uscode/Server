@@ -28,6 +28,9 @@ public class ToolInventory {
     @Column(nullable = true)
     private String description;
 
+    @Column(nullable = true)
+    private String image;
+
     public Tool getToolType(ReservationRequestDto reservationRequestDto){
         return this.toolType;
     }
