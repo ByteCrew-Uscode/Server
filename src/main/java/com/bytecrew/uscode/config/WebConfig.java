@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("exp://192.168.0.66:8081", "http://192.168.0.66:8081", "http://localhost:5173") // 프론트 주소
+                .allowedOrigins("exp://192.168.0.66:8081", "http://192.168.0.66:8081", "http://localhost:5173", "https://usfarmtools.vercel.app") // 프론트 주소
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true); // 필요한 경우
