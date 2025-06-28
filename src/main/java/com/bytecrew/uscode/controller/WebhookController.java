@@ -59,7 +59,7 @@ public class WebhookController {
     }
 
     private String handleListToolsIntent() {
-        List<Tool> toolNames = reservationService.getAllTools();
+        List<Tool> toolNames = reservationService.getAllTools().stream().limit(5).toList();;
         String sum = toolNames.stream()
                 .map(Tool::name)  // enum 이름을 String으로 변환
                 .collect(Collectors.joining(", ")); // 원하는 구분자
