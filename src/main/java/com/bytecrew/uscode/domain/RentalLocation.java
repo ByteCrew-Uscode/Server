@@ -23,5 +23,6 @@ public class RentalLocation {
     private String address;
     private String phone;
 
-
+    private double latitude;
+    private double longitude;
 }
