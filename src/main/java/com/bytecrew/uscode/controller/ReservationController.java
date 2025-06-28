@@ -32,7 +32,8 @@ public class ReservationController {
 //        List<String> toolNames = Arrays.stream(Tool.values())
 //                .map(Enum::name)
 //                .collect(Collectors.toList());
-        List<ToolInventory> toolNames = reservationService.getAllToolInventory();
+        List<Tool> toolNames = reservationService.getAllToolInventory()
+                .stream().limit(5).toList();
         return ResponseEntity.ok(toolNames);
         //tool_inventory
     }
