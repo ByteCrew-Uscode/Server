@@ -3,6 +3,8 @@ package com.bytecrew.uscode.controller;
 import com.bytecrew.uscode.domain.Tool;
 import com.bytecrew.uscode.dto.ReservationRequestDto;
 import com.bytecrew.uscode.service.ReservationService;
+import com.bytecrew.uscode.service.ToolLocationService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +26,10 @@ import java.util.stream.Collectors;
 public class WebhookController {
 
     private final ReservationService reservationService;
+    private final ToolLocationService toolLocationService;
 
     @PostMapping("/webhook")
+    @Hidden
     public ResponseEntity<Map<String, Object>> dialogflowWebhook(@RequestBody Map<String, Object> body) {
         // 1. 인텐트 이름 파싱
         String intentName = ((Map<String, Object>) body.get("queryResult"))
@@ -55,10 +59,12 @@ public class WebhookController {
     }
 
     private String handleListToolsIntent() {
-        List<String> toolNames = Arrays.stream(Tool.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
-        return "현재 대여 가능한 농기구는 다음과 같습니다: " + String.join(", ", toolNames);
+        List<Tool> toolNames = reservationService.getAllTools();
+        String sum = toolNames.stream()
+                .map(Tool::name)  // enum 이름을 String으로 변환
+                .collect(Collectors.joining(", ")); // 원하는 구분자
+
+        return "현재 대여 가능한 농기구는 다음과 같습니다: " + sum;
     }
 
     private String handleReserveToolIntent(Map<String, Object> params) {
@@ -81,8 +87,8 @@ public class WebhookController {
             dto.setStartDate(startDate);
             dto.setEndDate(endDate);
             reservationService.createReservation(dto);
-            String nearest = null;
-            return String.format("%s를 %s 부터 %s 까지 예약했습니다. 현재 가장 가까운 대여소는 %s 입니다. 계약서 작성을 해드릴까요?", toolName, startDate, endDate, nearest);
+            String nearest = toolLocationService.getLocationsByTool(Tool.valueOf(toolName)).getFirst().location();
+            return String.format("%s를 %s 부터 %s 까지 예약했습니다. 대여소는 %s 입니다. 계약서 작성을 해드릴까요?", toolName, startDate, endDate, nearest);
         } catch (Exception e) {
             return "예약 처리 중 오류가 발생했습니다. 정확한 날짜와 시간을 다시 말해주세요.";
         }
