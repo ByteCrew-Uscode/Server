@@ -14,9 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reserve")
@@ -26,17 +24,29 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @Operation(summary = "도구 목록 조회", description = "예약 가능한 농기구들의 이름 목록을 반환합니다.")
-    @GetMapping("/tools")
-    public ResponseEntity<List<ToolInventory>> getToolNames() {
+    @Operation(summary = "도구 목록 조회", description = "예약 가능한 농기구들을 반환합니다.")
+    @GetMapping("/tools/list")
+    public ResponseEntity<List<ToolInventory>> getToolInfoNames() {
 //        List<String> toolNames = Arrays.stream(Tool.values())
 //                .map(Enum::name)
 //                .collect(Collectors.toList());
-        List<Tool> toolNames = reservationService.getAllToolInventory()
-                .stream().limit(5).toList();
+        List<ToolInventory> toolNames = reservationService.getAllToolInventory().stream().toList();
         return ResponseEntity.ok(toolNames);
         //tool_inventory
     }
+
+    @Operation(summary = "도구 목록 조회", description = "예약 가능한 농기구들을 반환합니다.")
+    @GetMapping("/tools")
+    public ResponseEntity<List<Tool>> getToolNames() {
+//        List<String> toolNames = Arrays.stream(Tool.values())
+//                .map(Enum::name)
+//                .collect(Collectors.toList());
+        List<Tool> toolNames = reservationService.getAllTools().stream().limit(5).toList();
+        return ResponseEntity.ok(toolNames);
+        //tool_inventory
+    }
+
+
 
     @Operation(summary = "예약 생성", description = "새로운 농기구 예약을 등록합니다.")
     @ApiResponses({

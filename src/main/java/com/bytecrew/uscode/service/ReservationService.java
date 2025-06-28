@@ -29,6 +29,10 @@ public class ReservationService {
         return toolInventoryRepository.findAll();
     }
 
+    public List<Tool> getAllTools(){
+        return toolInventoryRepository.findAllToolTypes();
+    }
+
     public Reservation createReservation(ReservationRequestDto dto) {
         ToolInventory inventory = getToolInventory(dto.getTool());
 
