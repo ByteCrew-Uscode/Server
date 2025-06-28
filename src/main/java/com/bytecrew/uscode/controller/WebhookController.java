@@ -81,8 +81,8 @@ public class WebhookController {
             dto.setStartDate(startDate);
             dto.setEndDate(endDate);
             reservationService.createReservation(dto);
-
-            return String.format("%s를 %s 부터 %s 까지 예약했습니다.", toolName, startDate, endDate);
+            String nearest = null;
+            return String.format("%s를 %s 부터 %s 까지 예약했습니다. 현재 가장 가까운 대여소는 %s 입니다. 계약서 작성을 해드릴까요?", toolName, startDate, endDate, nearest);
         } catch (Exception e) {
             return "예약 처리 중 오류가 발생했습니다. 정확한 날짜와 시간을 다시 말해주세요.";
         }
