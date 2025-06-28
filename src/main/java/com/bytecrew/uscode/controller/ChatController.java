@@ -1,6 +1,8 @@
 package com.bytecrew.uscode.controller;
 
 import com.bytecrew.uscode.domain.Tool;
+import com.bytecrew.uscode.domain.ToolInventory;
+import com.bytecrew.uscode.repository.ToolInventoryRepository;
 import com.bytecrew.uscode.service.ReservationService;
 import com.google.genai.Client;
 import com.google.genai.types.Content;
@@ -24,10 +26,12 @@ import java.util.stream.Collectors;
 public class ChatController {
     
     private final String API_KEY;
+    private final ToolInventoryRepository toolInventoryRepository;
     private Client geminiClient; // Client 객체를 선언
 
-    public ChatController(@Value("${gemini.key}") String apiKey, ReservationService reservationService) {
+    public ChatController(@Value("${gemini.key}") String apiKey, ReservationService reservationService, ToolInventoryRepository toolInventoryRepository) {
         API_KEY = apiKey;
+        this.toolInventoryRepository = toolInventoryRepository;
     }
 
     @PostConstruct
@@ -36,7 +40,7 @@ public class ChatController {
     }
 
     @PostMapping("/chat")
-    public List<Tool> getRecommend(@RequestParam String state) {
+    public List<ToolInventory> getRecommend(@RequestParam String state) {
         try {
             List<String> toolNames = Arrays.stream(Tool.values())
                     .map(Enum::name)
@@ -50,7 +54,7 @@ public class ChatController {
 
             return  Arrays.stream(response.text().split(","))
                     .map(String::trim)
-                    .map(name -> Tool.valueOf(name))
+                    .map(name -> toolInventoryRepository.findByToolType(Tool.valueOf(name)).get())
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
@@ -60,7 +64,7 @@ public class ChatController {
     }
 
     @PostMapping(value="/chat/image", consumes = "multipart/form-data")
-    public List<Tool> getRecommendByImage(
+    public List<ToolInventory> getRecommendByImage(
             @Parameter(description = "재난 이미지 파일", required = true)
             @RequestParam MultipartFile image
     ) {
@@ -78,7 +82,7 @@ public class ChatController {
             GenerateContentResponse response = geminiClient.models.generateContent("gemini-2.0-flash", content, GenerateContentConfig.builder().build());
             return  Arrays.stream(response.text().split(","))
                     .map(String::trim)
-                    .map(name -> Tool.valueOf(name))
+                    .map(name -> toolInventoryRepository.findByToolType(Tool.valueOf(name)).get())
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 

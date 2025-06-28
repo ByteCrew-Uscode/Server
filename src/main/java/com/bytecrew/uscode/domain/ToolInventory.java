@@ -31,6 +31,9 @@ public class ToolInventory {
     @Column(nullable = true)
     private String image;
 
+    @Column()
+    private Integer price;
+
     public Tool getToolType(ReservationRequestDto reservationRequestDto){
         return this.toolType;
     }
