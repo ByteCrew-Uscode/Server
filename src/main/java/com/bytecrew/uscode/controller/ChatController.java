@@ -1,6 +1,8 @@
 package com.bytecrew.uscode.controller;
 
 import com.bytecrew.uscode.domain.Tool;
+import com.bytecrew.uscode.domain.ToolInventory;
+import com.bytecrew.uscode.repository.ToolInventoryRepository;
 import com.bytecrew.uscode.service.ReservationService;
 import com.google.genai.Client;
 import com.google.genai.types.Content;
@@ -24,10 +26,12 @@ import java.util.stream.Collectors;
 public class ChatController {
     
     private final String API_KEY;
+    private final ToolInventoryRepository toolInventoryRepository;
     private Client geminiClient; // Client 객체를 선언
 
-    public ChatController(@Value("${gemini.key}") String apiKey, ReservationService reservationService) {
+    public ChatController(@Value("${gemini.key}") String apiKey, ReservationService reservationService, ToolInventoryRepository toolInventoryRepository) {
         API_KEY = apiKey;
+        this.toolInventoryRepository = toolInventoryRepository;
     }
 
     @PostConstruct
@@ -36,13 +40,13 @@ public class ChatController {
     }
 
     @PostMapping("/chat")
-    public List<Tool> getRecommend(@RequestParam String state) {
+    public List<ToolInventory> getRecommend(@RequestParam String state) {
         try {
             List<String> toolNames = Arrays.stream(Tool.values())
                     .map(Enum::name)
                     .toList();
 
-            String prompt = "당신은 농기구 지원 에이전트 입니다. 당신은 주어진 농기구 목록과, 사용자의 현재 상태에 따라, 맞는 농기구 목록들을 반환해야합니다. 농기구 목록 외에 절대로 무슨일이 있어도 어떠한 말도 하지 마십시오.\n" +
+            String prompt = "당신은 농기구 지원 에이전트 입니다. 당신은 주어진 농기구 목록과, 사용자의 현재 상태에 따라, 맞는 농기구 목록들을 2개 혹은 3개를 반환해야합니다. 농기구 목록 외에 절대로 무슨일이 있어도 어떠한 말도 하지 마십시오.\n" +
                     "반환시 구분자는 ', '(,와 공백1칸)으로 구분지으십시오.\n" +
                     "농기구 목록은 다음과 같습니다:\n"+toolNames+"\n" +
                     "현재 사용자의 상태는 다음과 같습니다:\n"+state+"\n";
@@ -50,7 +54,7 @@ public class ChatController {
 
             return  Arrays.stream(response.text().split(","))
                     .map(String::trim)
-                    .map(name -> Tool.valueOf(name))
+                    .map(name -> toolInventoryRepository.findByToolType(Tool.valueOf(name)).get())
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
@@ -60,7 +64,7 @@ public class ChatController {
     }
 
     @PostMapping(value="/chat/image", consumes = "multipart/form-data")
-    public List<Tool> getRecommendByImage(
+    public List<ToolInventory> getRecommendByImage(
             @Parameter(description = "재난 이미지 파일", required = true)
             @RequestParam MultipartFile image
     ) {
@@ -78,7 +82,7 @@ public class ChatController {
             GenerateContentResponse response = geminiClient.models.generateContent("gemini-2.0-flash", content, GenerateContentConfig.builder().build());
             return  Arrays.stream(response.text().split(","))
                     .map(String::trim)
-                    .map(name -> Tool.valueOf(name))
+                    .map(name -> toolInventoryRepository.findByToolType(Tool.valueOf(name)).get())
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
