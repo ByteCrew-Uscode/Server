@@ -64,7 +64,7 @@ public class WebhookController {
                 .map(Tool::name)  // enum 이름을 String으로 변환
                 .collect(Collectors.joining(", ")); // 원하는 구분자
 
-        return "현재 대여 가능한 농기구는 다음과 같습니다: " + sum;
+        return "현재 " + sum +" 등의 농기구 대여가 가능합니다. 무엇을 대여 하시겠습니까?";
     }
 
     private String handleReserveToolIntent(Map<String, Object> params) {
