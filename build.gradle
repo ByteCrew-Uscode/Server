@@ -42,7 +42,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
-    implementation 'com.google.cloud:google-cloud-vision'
+    implementation 'com.google.cloud:google-cloud-vision:3.62.0'
     //implementation 'com.google.guava:guava:31.1-jre'
 
     implementation 'com.google.genai:google-genai:1.4.1' // 2025년 6월 기준 최신 버전 확인 및 사용
