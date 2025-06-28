@@ -25,8 +25,8 @@ public class ReservationService {
                 .orElseThrow(() -> new IllegalStateException("해당 농기구 수량 정보가 없습니다."));
     }
 
-    public List<Tool> getAllToolInventory() {
-        return toolInventoryRepository.findAllToolTypes();
+    public List<ToolInventory> getAllToolInventory() {
+        return toolInventoryRepository.findAll();
     }
 
     public Reservation createReservation(ReservationRequestDto dto) {
