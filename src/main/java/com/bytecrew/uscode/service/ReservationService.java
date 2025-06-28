@@ -55,7 +55,7 @@ public class ReservationService {
     }
 
     public List<ReservationResponseDto> getAllReservations() {
-        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> reservations = reservationRepository.findAllByOrderByIdDesc();
 
         return reservations.stream().map(reservation -> {
             ToolInventory inventory = toolInventoryRepository.findByToolType(reservation.getTool())
