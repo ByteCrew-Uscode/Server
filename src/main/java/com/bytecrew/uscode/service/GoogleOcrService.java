@@ -28,19 +28,14 @@ public class GoogleOcrService {
 
     public OcrExtractResponseDto extractOnly(MultipartFile file) {
         try (ImageAnnotatorClient vision = createVisionClient()) {
-            System.out.println(vision);
             ByteString imgBytes = ByteString.copyFrom(file.getBytes());
-            System.out.println(imgBytes);
 
             Image img = Image.newBuilder().setContent(imgBytes).build();
-            System.out.println(img);
             Feature feat = Feature.newBuilder().setType(Feature.Type.TEXT_DETECTION).build();
-            System.out.println(feat);
             AnnotateImageRequest request = AnnotateImageRequest.newBuilder()
                     .addFeatures(feat)
                     .setImage(img)
                     .build();
-            System.out.println(request);
 
             AnnotateImageResponse response = vision.batchAnnotateImages(List.of(request))
                     .getResponsesList().get(0);
@@ -77,6 +72,7 @@ public class GoogleOcrService {
         }
         return "이름없음";
     }
+
     private ImageAnnotatorClient createVisionClient() throws Exception {
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath));
         ImageAnnotatorSettings settings = ImageAnnotatorSettings.newBuilder()
@@ -84,6 +80,7 @@ public class GoogleOcrService {
                 .build();
         return ImageAnnotatorClient.create(settings);
     }
+
     private String extractJumin(String text) {
         return text.replaceAll("[^0-9-]", "")
                 .replaceAll(".*?(\\d{6}-\\d{7}).*", "$1");

@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface ToolRentalMappingRepository extends JpaRepository<ToolRentalMapping, Long> {
     List<ToolRentalMapping> findByToolAndQuantityGreaterThan(Tool tool, int qty);
+    List<ToolRentalMapping> findByRentalLocationIdAndQuantityGreaterThan(Long rentalLocationId, int quantity);
 }
+
 

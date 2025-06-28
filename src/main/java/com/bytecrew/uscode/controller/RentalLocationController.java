@@ -1,7 +1,6 @@
 package com.bytecrew.uscode.controller;
 
-import com.bytecrew.uscode.domain.Tool;
-import com.bytecrew.uscode.dto.ToolRentalLocationDto;
+import com.bytecrew.uscode.dto.ToolQuantityDto;
 import com.bytecrew.uscode.service.ToolLocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +13,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/tools")
-public class ToolController {
+@RequestMapping("/api/locations")
+public class RentalLocationController {
 
     private final ToolLocationService toolLocationService;
 
-    @GetMapping("/{tool}/locations")
-    public ResponseEntity<List<ToolRentalLocationDto>> getToolLocations(@PathVariable Tool tool) {
-        return ResponseEntity.ok(toolLocationService.getLocationsByTool(tool));
+    @GetMapping("/{locationId}/tools")
+    public ResponseEntity<List<ToolQuantityDto>> getToolsByLocation(@PathVariable Long locationId) {
+        return ResponseEntity.ok(toolLocationService.getToolsByRentalLocation(locationId));
     }
-
 }
 
