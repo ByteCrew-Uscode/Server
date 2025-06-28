@@ -28,11 +28,11 @@ public class ReservationController {
 
     @Operation(summary = "도구 목록 조회", description = "예약 가능한 농기구들의 이름 목록을 반환합니다.")
     @GetMapping("/tools")
-    public ResponseEntity<List<Tool>> getToolNames() {
+    public ResponseEntity<List<ToolInventory>> getToolNames() {
 //        List<String> toolNames = Arrays.stream(Tool.values())
 //                .map(Enum::name)
 //                .collect(Collectors.toList());
-        List<Tool> toolNames = reservationService.getAllToolInventory();
+        List<ToolInventory> toolNames = reservationService.getAllToolInventory();
         return ResponseEntity.ok(toolNames);
         //tool_inventory
     }

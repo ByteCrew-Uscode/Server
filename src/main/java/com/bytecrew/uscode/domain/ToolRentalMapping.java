@@ -11,14 +11,15 @@ public class ToolRentalMapping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Tool tool;  // 트랙터, 경운기 등
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ToolInventory toolInventory;  // 트랙터, 경운기 등
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rental_location_id")
     private RentalLocation rentalLocation;
 
-    private int quantity;  // 이건 별도로 관리 (ToolInventory 대신)
+    @Column()
+    private Integer quantity;
 }
 
 /*

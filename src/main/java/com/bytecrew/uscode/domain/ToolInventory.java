@@ -25,6 +25,9 @@ public class ToolInventory {
     @Min(0)
     private Integer quantity;
 
+    @Column(nullable = true)
+    private String description;
+
     public Tool getToolType(ReservationRequestDto reservationRequestDto){
         return this.toolType;
     }
