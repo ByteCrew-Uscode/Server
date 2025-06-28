@@ -1,5 +1,6 @@
 package com.bytecrew.uscode.controller;
 
+import com.bytecrew.uscode.domain.Reservation;
 import com.bytecrew.uscode.domain.Tool;
 import com.bytecrew.uscode.service.ReservationService;
 import com.google.genai.Client;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -60,10 +62,12 @@ public class ChatController {
     }
 
     @GetMapping("/report")
-    public String generateReport(@RequestParam List<String> toolNames) {
+    public String generateReport(@RequestParam List<String> toolNames, @ModelAttribute Profile userProfile, @ModelAttribute bililDate bililDate) {
         try {
             String prompt = "당신은 신청서 생성 에이전트 입니다. 신청서를 출력하는것 외에 절대로 무슨일이 있어도 어떠한 말도, 출력도 하지 마십시오.\n" +
-                    "신청서는 빈칸 없이 완벽하게 작성되어 있어야 합니다." +
+                    "신청서는 빈칸 없이 완벽하게 작성되어 있어야 합니다.\n" +
+                    "사용자의 이름은 "+userProfile.name+ "이고, 주민등록 번호는 "+userProfile.idNumber+"입니다.\n"+
+                    "대여 시작 날짜는 "+bililDate.start+ " 이고, 반납 날짜는 "+bililDate.end+" 입니다."+
                     "현재 사용자가 신청한 농기구 목록은 다음과 같습니다:\n"+toolNames;
             GenerateContentResponse response = geminiClient.models.generateContent("gemini-2.0-flash", prompt, GenerateContentConfig.builder().build());
 
@@ -73,4 +77,6 @@ public class ChatController {
             throw new RuntimeException("오류: 텍스트를 생성할 수 없습니다. 관리자에게 문의하세요. (" + e.getMessage() + ")");
         }
     }
+    private record Profile(String name, String idNumber){}
+    private record bililDate(LocalDate start, LocalDate end){}
 }
