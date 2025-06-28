@@ -32,6 +32,7 @@ public class Reservation {
     //예약 위치
     private String location;
 
+    private String rentalLocation;
 
     //예약자 성명
     private String reservationName;
@@ -40,11 +41,12 @@ public class Reservation {
     private Long version;
 
     @Builder
-    public Reservation(Tool tool, LocalDate startDate, LocalDate endDate, String location, String reservationName) {
+    public Reservation(Tool tool, LocalDate startDate, LocalDate endDate, String location, String reservationName, String rentalLocation) {
         this.tool = tool;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
         this.reservationName = reservationName;
+        this.rentalLocation = rentalLocation;
     }
 }

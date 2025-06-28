@@ -4,6 +4,7 @@ import com.bytecrew.uscode.domain.Reservation;
 import com.bytecrew.uscode.domain.Tool;
 import com.bytecrew.uscode.domain.ToolInventory;
 import com.bytecrew.uscode.dto.ReservationRequestDto;
+import com.bytecrew.uscode.dto.ToolInventoryAdd;
 import com.bytecrew.uscode.repository.ReservationRepository;
 import com.bytecrew.uscode.repository.ToolInventoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -95,4 +96,28 @@ public class ReservationService {
 
         reservationRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public List<ToolInventoryAdd> getAllReservationDetails() {
+        List<Reservation> reservations = reservationRepository.findAll();
+
+        return reservations.stream().map(reservation -> {
+            Tool tool = reservation.getTool();
+
+            ToolInventory inventory = toolInventoryRepository.findByToolType(tool)
+                    .orElseThrow(() -> new IllegalStateException("해당 도구 정보가 존재하지 않습니다."));
+
+            // location을 reservation에 문자열로 저장 중이라면 그대로 사용
+            return new ToolInventoryAdd(
+                    tool,
+                    reservation.getStartDate(),
+                    reservation.getEndDate(),
+                    reservation.getRentalLocation(),
+                    reservation.getReservationName(),
+                    inventory.getDescription(),
+                    inventory.getImage()
+            );
+        }).toList();
+    }
+
 }

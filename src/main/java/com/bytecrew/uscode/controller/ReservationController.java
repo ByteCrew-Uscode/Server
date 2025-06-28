@@ -4,6 +4,7 @@ import com.bytecrew.uscode.domain.Tool;
 import com.bytecrew.uscode.domain.Reservation;
 import com.bytecrew.uscode.domain.ToolInventory;
 import com.bytecrew.uscode.dto.ReservationRequestDto;
+import com.bytecrew.uscode.dto.ToolInventoryAdd;
 import com.bytecrew.uscode.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,6 +46,11 @@ public class ReservationController {
         return ResponseEntity.ok(toolNames);
         //tool_inventory
     }
+    @Operation(summary = "(유진요청)예약 상세 리스트 조회", description = "예약 + 도구 정보 + 이미지 + 설명 + 사업소까지 포함된 전체 예약 리스트를 반환합니다.")
+    @GetMapping("/details")
+    public ResponseEntity<List<ToolInventoryAdd>> getAllReservationDetails() {
+        return ResponseEntity.ok(reservationService.getAllReservationDetails());
+    }
 
 
 
@@ -58,6 +64,9 @@ public class ReservationController {
             @RequestBody ReservationRequestDto dto) {
         return ResponseEntity.ok(reservationService.createReservation(dto));
     }
+
+
+
 
     @Operation(summary = "전체 예약 조회", description = "모든 예약 목록을 반환합니다.")
     @GetMapping
