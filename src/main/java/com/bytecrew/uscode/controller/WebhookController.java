@@ -6,6 +6,7 @@ import com.bytecrew.uscode.service.ReservationService;
 import com.bytecrew.uscode.service.ToolLocationService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ public class WebhookController {
     private final ReservationService reservationService;
     private final ToolLocationService toolLocationService;
 
-    @PostMapping("/webhook")
+    @PostMapping(value = "/webhook", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Hidden
     public ResponseEntity<Map<String, Object>> dialogflowWebhook(@RequestBody Map<String, Object> body) {
         // 1. 인텐트 이름 파싱
@@ -69,11 +70,11 @@ public class WebhookController {
 
     private String handleReserveToolIntent(Map<String, Object> params) {
         try {
-            String toolName = (String) params.get("tool");
+            List<String> toolNames = ((List<String>) params.get("tool"));
             String start = (String) params.get("startDate");
             String end = (String) params.get("endDate");
 
-            if (toolName == null || start == null || end == null) {
+            if (toolNames == null || start == null || end == null) {
                 return "도구 이름, 대여 시작 날짜, 대여 종료 날짜를 모두 알려주세요.";
             }
 
@@ -82,16 +83,16 @@ public class WebhookController {
             LocalDate endDate = LocalDate.parse(end.substring(0, 10)); // "10:00:00" 형식
 
             //가장 가까운 대여소
-            String nearest = toolLocationService.getLocationsByTool(Tool.valueOf(toolName)).getFirst().location();
+            String nearest = toolLocationService.getLocationsByTool(Tool.valueOf(toolNames.getFirst())).getFirst().location();
 
             // 예약 생성
             ReservationRequestDto dto = new ReservationRequestDto();
-            dto.setTool(Tool.valueOf(toolName));
+            dto.setTool(Tool.valueOf(toolNames.getFirst()));
             dto.setStartDate(startDate);
             dto.setEndDate(endDate);
             dto.setLocation(nearest);
             reservationService.createReservation(dto);
-            return String.format("%s를 %s 부터 %s 까지 예약했습니다. 대여소는 %s 입니다. 계약서 작성을 해드릴까요?", toolName, startDate, endDate, nearest);
+            return String.format("%s를 %s 부터 %s 까지 예약했습니다. 대여소는 %s 입니다. 계약서 작성을 해드릴까요?", toolNames, startDate, endDate, nearest);
         } catch (Exception e) {
             return "예약 처리 중 오류가 발생했습니다. 정확한 날짜와 시간을 다시 말해주세요.";
         }
